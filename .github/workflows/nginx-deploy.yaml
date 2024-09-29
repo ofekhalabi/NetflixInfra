@@ -1,5 +1,5 @@
 name: Netflix Infra - NGINX Service Deployment
-
+become: yes
 #This workflow is triggered by a push event to the "main" branch of the repository
 on:
   push:
