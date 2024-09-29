@@ -24,8 +24,8 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
-          # Copy the files from the current work dir into the EC2 instance, under `~/nginx-config`.
-          scp -o StrictHostKeyChecking=no -i mykey.pem nginx-config ubuntu@$EC2_PUBLIC_IP:~/nginx-config
+          # Copy the files from the current work dir into the EC2 instance, under `/etc/nginx/conf.d/default.conf`.
+          scp -o StrictHostKeyChecking=no -i mykey.pem nginx-config ubuntu@$EC2_PUBLIC_IP:/etc/nginx/conf.d/default.conf
           
           # Connect to your EC2 instance and execute the `deploy.sh` script (this script is part of the repo files). 
           # You need to implement the `deploy.sh` script yourself.
