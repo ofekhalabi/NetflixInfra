@@ -25,11 +25,10 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > mykey.pem
           chmod 400 mykey.pem
           # Copy the files from the current work dir into the EC2 instance, under `~/nginx-config`.
-          scp -o StrictHostKeyChecking=no -i mykey.pem nginx-config ubuntu@$EC2_PUBLIC_IP:~/nginx-config
-          
+          scp -o StrictHostKeyChecking=no -i mykey.pem nginx-config deploy.sh ubuntu@$EC2_PUBLIC_IP:~/nginx-config
           # Connect to your EC2 instance and execute the `deploy.sh` script (this script is part of the repo files). 
           # You need to implement the `deploy.sh` script yourself.
           #
           # Upon completion, the NetflixMovieCatalog app should be running with its newer version. 
           # To keep the app running in the background independently on the terminal session you are logging to, configure it as a Linux service.
-  
+          ssh -o StrictHostKeyChecking=no -i mykey.pem ubuntu@$EC2_PUBLIC_IP "bash /home/ubuntu/deploy.sh"
