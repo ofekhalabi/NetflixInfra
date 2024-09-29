@@ -12,7 +12,5 @@ server {
 
     location /poster/ {
         root  /usr/share/nginx;
-        index xtPPOPTad1qopK6uDe3VlYUa22o.jpg;
-
     }
 }
