@@ -7,20 +7,17 @@ services:
     volumes:
       - /data/nginx:/etc/nginx/conf.d
     image: nginx
-
   NetflixFrontend:
     environment:
       MOVIE_CATALOG_SERVICE: http://NetflixMovieCatalog:8080
     networks:
       - public-net-1
       - private-net-1
-    image: ofekhalabi/nf:1.0.3
-
+    image: ofekhalabi/netflix-frontend:6
   NetflixMovieCatalog:
     networks:
       - private-net-1
     image: ofekhalabi/netflix-catalog:2.0.0
-
   Availabilityagent:
     environment:
       MONITORED_HOST: http://Nginx:80
@@ -28,7 +25,6 @@ services:
       - private-net-2
       - public-net-1
     image: ofekhalabi/availability_agent:1.0.0
-
   Grafana:
     ports:
       - "3000:3000"
@@ -37,8 +33,6 @@ services:
     volumes:
       - /data/grafana:/var/lib/grafana
     image: grafana/grafana
-
-
   Prometheus:
     networks:
       - private-net-2
@@ -46,7 +40,6 @@ services:
       - /data/prometheus/files/prometheus.yaml:/etc/prometheus/prometheus.yml
       - /data/prometheus:/prometheus
     image: prom/prometheus
-
 networks:
   public-net-1:
     driver: bridge
