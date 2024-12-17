@@ -14,12 +14,12 @@ services:
     networks:
       - public-net-1
       - private-net-1
-    image: ofekhalabi/netflix-frontend
+    image: ofekhalabi/nf:1.0.3
 
   NetflixMovieCatalog:
     networks:
       - private-net-1
-    image: ofekhalabi/netflix-movie-catalog
+    image: ofekhalabi/netflix-catalog:2.0.0
 
   Availabilityagent:
     environment:
