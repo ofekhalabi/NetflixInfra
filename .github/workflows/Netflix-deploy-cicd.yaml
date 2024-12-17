@@ -24,7 +24,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update docker-compose.yaml
-        uses: mikefarah/yq@master
         run: |
           yq e ".services.\"${{ github.event.inputs.service_name }}\".image = \"${{ github.event.inputs.image }}\"" -i docker-compose.yaml
 
