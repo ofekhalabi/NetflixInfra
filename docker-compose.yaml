@@ -13,7 +13,7 @@ services:
     networks:
       - public-net-1
       - private-net-1
-    image: ofekhalabi/netflix-frontend:6
+    image: ofekhalabi/netflix-frontend:7
   NetflixMovieCatalog:
     networks:
       - private-net-1
