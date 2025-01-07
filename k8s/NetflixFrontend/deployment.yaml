@@ -12,16 +12,15 @@ spec:
       app: netflix-frontend
   template:
     metadata:
-        labels:
-          app: netflix-frontend
+      labels:
+        app: netflix-frontend
     spec:
       containers:
-      - name: server
-        image: ofekhalabi/netflix-frontend:9
-        env:
-        - name: MOVIE_CATALOG_SERVICE
-          value: "http://netflixmoviecatalog-service:8080"
-
+        - name: server
+          image: ofekhalabi/netflix-frontend:10
+          env:
+            - name: MOVIE_CATALOG_SERVICE
+              value: "http://netflixmoviecatalog-service:8080"
 ---
 apiVersion: v1
 kind: Service
@@ -34,3 +33,7 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
+  template:
+    spec:
+      containers:
+        - image: ofekhalabi/netflix-frontend:10
