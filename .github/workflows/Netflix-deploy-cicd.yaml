@@ -1,60 +1,60 @@
-name: Netflix stack deploy
+# name: Netflix stack deploy
 
-on:
-  workflow_dispatch:
-    inputs:
-      service_name:
-        description: "Target service to deploy"
-        required: true
-        type: string
-      image:
-        description: "New Docker image version"
-        required: true
-        type: string
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       service_name:
+#         description: "Target service to deploy"
+#         required: true
+#         type: string
+#       image:
+#         description: "New Docker image version"
+#         required: true
+#         type: string
 
-permissions:
-  contents: write
+# permissions:
+#   contents: write
 
 
-jobs:
-  UpdateComposeYaml:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+# jobs:
+#   UpdateComposeYaml:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Update docker-compose.yaml
-        run: |
-          yq e ".services.\"${{ github.event.inputs.service_name }}\".image = \"${{ github.event.inputs.image }}\"" -i docker-compose.yaml
+#       - name: Update docker-compose.yaml
+#         run: |
+#           yq e ".services.\"${{ github.event.inputs.service_name }}\".image = \"${{ github.event.inputs.image }}\"" -i docker-compose.yaml
 
-      - name: commit and push
-        run: |
-          git config --local user.email "github@action"
-          git config --local user.name "auto-test"
+#       - name: commit and push
+#         run: |
+#           git config --local user.email "github@action"
+#           git config --local user.name "auto-test"
 
-          git add docker-compose.yaml && git commit -m "Update ${{ github.event.inputs.service_name }} image to ${{ github.event.inputs.image }}"
-          git push origin main --force
+#           git add docker-compose.yaml && git commit -m "Update ${{ github.event.inputs.service_name }} image to ${{ github.event.inputs.image }}"
+#           git push origin main --force
 
-  Deploy:
-    name: Deploy a Netflix stack service
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repo code
-        uses: actions/checkout@v2
+#   Deploy:
+#     name: Deploy a Netflix stack service
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout the repo code
+#         uses: actions/checkout@v2
 
-      - name: Update the Docker Compose project in the EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_PUBLIC_IP }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-          script: |
-            repo_dir=${{ github.event.inputs.service_name }}_${GITHUB_RUN_ID}
-            git clone https://github.com/${GITHUB_REPOSITORY} $repo_dir
+#       - name: Update the Docker Compose project in the EC2
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.EC2_PUBLIC_IP }}
+#           username: ubuntu
+#           key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+#           script: |
+#             repo_dir=${{ github.event.inputs.service_name }}_${GITHUB_RUN_ID}
+#             git clone https://github.com/${GITHUB_REPOSITORY} $repo_dir
             
-            cd $repo_dir
+#             cd $repo_dir
             
-            service_name=${{ github.event.inputs.service_name }}
-            docker compose up -d $service_name
+#             service_name=${{ github.event.inputs.service_name }}
+#             docker compose up -d $service_name
             
-            echo "Deploy completed."
+#             echo "Deploy completed."
