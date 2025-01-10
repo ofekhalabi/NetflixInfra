@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ofekhalabi/netflix-frontend:10
+          image: ofekhalabi/netflix-frontend:11
           env:
             - name: MOVIE_CATALOG_SERVICE
               value: "http://netflixmoviecatalog-service:8080"
@@ -36,4 +36,4 @@ spec:
   template:
     spec:
       containers:
-        - image: ofekhalabi/netflix-frontend:10
+        - image: ofekhalabi/netflix-frontend:11
