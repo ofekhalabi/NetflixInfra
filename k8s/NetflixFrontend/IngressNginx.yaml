@@ -1,18 +1,43 @@
-# k8s/ingress-demo.yaml
+## k8s/ingress-demo.yaml
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: netflix-frontend
+#spec:
+#  ingressClassName: nginx
+#  rules:
+#  - host: ofekhnetflix.devops-int-college.com
+#    http:
+#      paths:
+#      - path: /
+#        pathType: Prefix
+#        backend:
+#          service:
+#            name: netflix-frontend-service
+#            port:
+#              number: 3000
+
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: netflix-frontend
+  name: nginx-ingress
 spec:
+  tls:
+    - hosts:
+      - ofekhnetflix.devops-int-college.com
+      # This assumes tls-secret exists and the SSL
+      # certificate contains a CN for ofekhnetflix.devops-int-college.com
+      secretName: tls-secret
   ingressClassName: nginx
   rules:
-  - host: ofekhnetflix.devops-int-college.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: netflix-frontend-service
-            port:
-              number: 3000
+    - host: ofekhnetflix.devops-int-college.com
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: netflix-frontend-service
+              port:
+                number: 3000
