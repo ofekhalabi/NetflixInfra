@@ -21,23 +21,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  labels:
   name: nginx-ingress
+  namespace: default
 spec:
-  tls:
-    - hosts:
-      - ofekhnetflix.devops-int-college.com
-      # This assumes tls-secret exists and the SSL
-      # certificate contains a CN for ofekhnetflix.devops-int-college.com
-      secretName: tls-secret
   ingressClassName: nginx
   rules:
     - host: ofekhnetflix.devops-int-college.com
       http:
         paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: netflix-frontend-service
-              port:
-                number: 3000
+          - backend:
+              service:
+                name: netflix-frontend-service
+                port:
+                  number: 3000
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - ofekhnetflix.devops-int-college.com
+      secretName: tls-secret
