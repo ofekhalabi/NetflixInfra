@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ofekhalabi/netflix-frontend:11
+          image: ofekhalabi/netflix-frontend:12
           env:
             - name: AWS_SQS_QUEUE_URL
               value: https://sqs.eu-north-1.amazonaws.com/352708296901/ofekh-netflix-events
