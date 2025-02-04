@@ -19,10 +19,10 @@ spec:
         - name: server
           image: ofekhalabi/netflix-frontend:11
           env:
-            - name: AWS_SQS_QUEUE_URL
-              value: https://sqs.eu-north-1.amazonaws.com/352708296901/ofekh-netflix-events
             - name: AWS_REGION
               value: eu-north-1
+            - name: AWS_SNS_TOPIC_ARN
+              value: arn:aws:sns:eu-north-1:352708296901:ofekh-netflix-events-topic
             - name: MOVIE_CATALOG_SERVICE
               value: "http://netflixmoviecatalog-service:8080"
 ---
