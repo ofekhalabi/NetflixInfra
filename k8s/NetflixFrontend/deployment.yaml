@@ -37,55 +37,7 @@ spec:
     - protocol: TCP
       port: 3000
       targetPort: 3000
-  template:
-    spec:
-      containers:
-        - image: ofekhalabi/netflix-frontend:11
 
 
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: netflix-frontend-canary
-  labels:
-    app: netflix-frontend-canary
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: netflix-frontend-canary
-  template:
-    metadata:
-      labels:
-        app: netflix-frontend-canary
-    spec:
-      containers:
-        - name: server
-          image: ofekhalabi/netflix-frontend:12
-          env:
-            - name: AWS_SQS_QUEUE_URL
-              value: https://sqs.eu-north-1.amazonaws.com/352708296901/ofekh-netflix-events
-            - name: AWS_REGION
-              value: eu-north-1
-            - name: AWS_SNS_TOPIC_ARN
-              value: arn:aws:sns:eu-north-1:352708296901:ofekh-netflix-events-topic
-            - name: MOVIE_CATALOG_SERVICE
-              value: "http://netflixmoviecatalog-service:8080"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: netflix-frontend-canary-service
-spec:
-  selector:
-    app: netflix-frontend-canary-service
-  ports:
-    - protocol: TCP
-      port: 3001
-      targetPort: 3000
-  template:
-    spec:
-      containers:
-        - image: ofekhalabi/netflix-frontend:12
+
 
