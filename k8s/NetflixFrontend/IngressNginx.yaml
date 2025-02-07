@@ -6,13 +6,13 @@ metadata:
 spec:
   tls:
     - hosts:
-      - ofekh-netflix-movie.devops-int-college.com
+      - ofekhnetflix.devops-int-college.com
       # This assumes tls-secret exists and the SSL
       # certificate contains a CN for ofekhnetflix.devops-int-college.com
       secretName: tls-secret
   ingressClassName: nginx
   rules:
-    - host: ofekh-netflix-movie.devops-int-college.com
+    - host: ofekhnetflix.devops-int-college.com
       http:
         paths:
         - path: /
