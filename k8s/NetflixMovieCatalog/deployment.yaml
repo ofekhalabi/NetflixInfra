@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ofekhalabi/netflix-movie-catalog:9
+          image: ofekhalabi/netflix-movie-catalog:15
 
 ---
 apiVersion: v1
