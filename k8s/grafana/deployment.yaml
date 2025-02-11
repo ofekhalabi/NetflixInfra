@@ -25,7 +25,7 @@ metadata:
   name: grafana-service
 spec:
   selector:
-    app: grafana-service
+    app: grafana
   ports:
     - protocol: TCP
       port: 3001
