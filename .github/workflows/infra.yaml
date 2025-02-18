@@ -1,0 +1,70 @@
+on:
+  workflow_dispatch:
+    inputs:
+      region:
+        description: 'choose the region to deploy the infra'
+        required: true
+        default: 'eu-north-1'
+        type: choice
+        options:
+          - eu-north-1
+          - eu-west-2
+      environment:
+        description: 'choose the environment to deploy the infra'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+        
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # TODO define this secret in your GitHub repo settings
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # TODO define this secret in your GitHub repo settings
+
+jobs:
+  Infra_Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the app code
+        uses: actions/checkout@v2
+      
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        
+
+      - name: configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set region ${{ github.event.inputs.region }}
+      
+      - name: Initialize Terraform
+        run: |
+          cd ~/tf
+          terraform init
+
+      - name: Terraform workspace
+        run: |
+          cd ~/tf
+          WORKSPACE_NAME=${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+          if terraform workspace list | grep -q "\b$WORKSPACE_NAME\b"; then
+            terraform workspace new ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+            terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+          else
+            terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+          fi
+      
+      - name: Terraform plan
+        run: |
+          cd ~/tf
+          terraform plan -var-file=~/tf/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+
+      - name: Terraform apply
+        run: |
+          cd ~/tf
+          terraform apply -var-file=~/tf/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+        
+
+
+
+
