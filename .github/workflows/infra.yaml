@@ -44,7 +44,7 @@ jobs:
       
       - name: Initialize Terraform
         run: |
-          cd /tf
+          find / -type d -name "tf" 2>/dev/null
           terraform init
 
       - name: Terraform workspace
