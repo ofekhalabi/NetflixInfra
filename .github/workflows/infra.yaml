@@ -62,12 +62,12 @@ jobs:
       - name: Terraform plan
         run: |
           cd $PATH_TF
-          terraform plan -var-file=$PATH_TF/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+          terraform plan -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
 
       - name: Terraform apply
         run: |
           cd $PATH_TF
-          terraform apply -var-file=$PATH_TF/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+          terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
         
 
 
