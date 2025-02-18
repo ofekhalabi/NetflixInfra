@@ -21,6 +21,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # TODO define this secret in your GitHub repo settings
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # TODO define this secret in your GitHub repo settings
   AWS_PUBLIC_KEY_TF : ${{ secrets.AWS_PUBLIC_KEY_TF }}  # TODO define this secret in your GitHub repo settings
+  PATH_TF: "/home/runner/work/NetflixInfra/NetflixInfra/tf"
 
 jobs:
   Infra_Deploy:
@@ -44,12 +45,12 @@ jobs:
       
       - name: Initialize Terraform
         run: |
-          cd /home/runner/work/NetflixInfra/NetflixInfra/tf
+          cd $PATH_TF
           terraform init
 
       - name: Terraform workspace
         run: |
-          cd /home/runner/work/NetflixInfra/NetflixInfra/tf
+          cd $PATH_TF
           WORKSPACE_NAME=${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
           if terraform workspace list | grep -q "\b$WORKSPACE_NAME\b"; then
             terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
@@ -60,13 +61,13 @@ jobs:
       
       - name: Terraform plan
         run: |
-          cd /home/runner/work/NetflixInfra/NetflixInfra/tf
-          terraform plan -var-file=~/tf/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+          cd $PATH_TF
+          terraform plan -var-file=$PATH_TF/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
 
       - name: Terraform apply
         run: |
-          cd /home/runner/work/NetflixInfra/NetflixInfra/tf
-          terraform apply -var-file=~/tf/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
+          cd $PATH_TF
+          terraform apply -var-file=$PATH_TF/vars/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
         
 
 
