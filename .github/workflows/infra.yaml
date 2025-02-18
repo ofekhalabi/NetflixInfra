@@ -20,6 +20,7 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # TODO define this secret in your GitHub repo settings
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # TODO define this secret in your GitHub repo settings
+  AWS_PUBLIC_KEY_TF : ${{ secrets.AWS_PUBLIC_KEY_TF }}  # TODO define this secret in your GitHub repo settings
 
 jobs:
   Infra_Deploy:
@@ -31,6 +32,9 @@ jobs:
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v2
         
+      - name: Modify Public Key in Terraform File
+        run: |
+          sed -i 's|public_key = file(".*")|public_key = "${{ secrets.AWS_PUBLIC_KEY_TF }}"|' tf/main.tf
 
       - name: configure AWS credentials
         run: |

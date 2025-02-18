@@ -22,6 +22,7 @@ resource "aws_instance" "netflix_app" {
   instance_type   = "t3.medium"
   security_groups = [aws_security_group.netflix_app_sg.name]
   key_name        = aws_key_pair.tf_key_ec2.key_name
+  user_data       = file("./deploy.sh")
 
   tags = {
     Name      = "ofekh-tf-netflix-${var.env}"
@@ -29,10 +30,24 @@ resource "aws_instance" "netflix_app" {
     Env       = var.env
   }
 
+  # Provisioner to copy a file from local machine to EC2
+  provisioner "file" {
+    source      = "./compose.yaml"            # Path to file on your local machine
+    destination = "/home/ubuntu/compose.yaml" # Destination on the EC2 instance
+  }
+
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"                                     # Default for Ubuntu AMIs
+    private_key = file("C:/Users/shayh/.ssh/ofekh-tf-key.pem") # Path to your private key
+    host        = self.public_ip
+  }
+
   depends_on = [
     aws_s3_bucket.tf_s3_bucket # the instance will be created only after the s3 bucket is created
   ]
 }
+
 
 #create a new security group
 resource "aws_security_group" "netflix_app_sg" {
