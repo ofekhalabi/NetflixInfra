@@ -52,9 +52,9 @@ jobs:
           cd /home/runner/work/NetflixInfra/NetflixInfra/tf
           WORKSPACE_NAME=${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
           if terraform workspace list | grep -q "\b$WORKSPACE_NAME\b"; then
-            terraform workspace new ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
             terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
           else
+            terraform workspace new ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
             terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
           fi
       
