@@ -66,45 +66,45 @@ jobs:
           cd $PATH_TF
           terraform plan -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
 
-infra-apply:
-    needs: infra-plan
-    runs-on: ubuntu-latest   
-    environment: manual-approval  # <-- Requires manual approval before continuing
-    steps:
-      - name: Checkout the app code
-        uses: actions/checkout@v2
-      
-      - name: setup Terraform
-        uses: hashicorp/setup-terraform@v2
+  infra-apply:
+      needs: infra-plan
+      runs-on: ubuntu-latest   
+      environment: manual-approval  # <-- Requires manual approval before continuing
+      steps:
+        - name: Checkout the app code
+          uses: actions/checkout@v2
         
-      - name: Modify Public Key in Terraform File
-        run: |
-          sed -i 's|public_key = file(".*")|public_key = "${{ secrets.AWS_PUBLIC_KEY_TF }}"|' tf/main.tf
+        - name: setup Terraform
+          uses: hashicorp/setup-terraform@v2
+          
+        - name: Modify Public Key in Terraform File
+          run: |
+            sed -i 's|public_key = file(".*")|public_key = "${{ secrets.AWS_PUBLIC_KEY_TF }}"|' tf/main.tf
 
-      - name: configure AWS credentials
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set region ${{ github.event.inputs.region }}
-      
-      - name: Initialize Terraform
-        run: |
-          cd $PATH_TF
-          terraform init
-
-      - name: Terraform workspace
-        run: |
-          cd $PATH_TF
-          WORKSPACE_NAME=${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
-          if terraform workspace list | grep -q "\b$WORKSPACE_NAME\b"; then
-            terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
-          else
-            terraform workspace new ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
-            terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
-          fi
-      
-      - name: Terraform apply
-        run: |
-          cd $PATH_TF
-          terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
+        - name: configure AWS credentials
+          run: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region ${{ github.event.inputs.region }}
         
+        - name: Initialize Terraform
+          run: |
+            cd $PATH_TF
+            terraform init
+
+        - name: Terraform workspace
+          run: |
+            cd $PATH_TF
+            WORKSPACE_NAME=${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+            if terraform workspace list | grep -q "\b$WORKSPACE_NAME\b"; then
+              terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+            else
+              terraform workspace new ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+              terraform workspace select ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+            fi
+        
+        - name: Terraform apply
+          run: |
+            cd $PATH_TF
+            terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
+          
