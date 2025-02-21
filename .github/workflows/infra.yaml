@@ -27,7 +27,6 @@ env:
 jobs:
   infra-plan:
     runs-on: ubuntu-latest
-    environment: manual-approval
     steps:
       - name: Checkout the app code
         uses: actions/checkout@v2
@@ -65,12 +64,14 @@ jobs:
         run: |
           cd $PATH_TF
           terraform plan -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
-      
-      - name: Wait for manual approval
+
+      - name: Wait for Manual Approval
         uses: hmarr/await-approval-action@v1
- 
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Terraform apply
         run: |
           cd $PATH_TF
           terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
-          
+        
