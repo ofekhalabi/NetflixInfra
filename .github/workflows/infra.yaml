@@ -73,33 +73,33 @@ jobs:
           name: terraform-plan
           path: $PATH_TF/plan_output.txt
         
-Infra_Apply:
-    needs: Infra_Plan
-    runs-on: ubuntu-latest
-    environment: manual-approval
-    steps:
-      - name: Download Terraform Plan Output
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-plan
-          path: $PATH_TF
+  Infra_Apply:
+      needs: Infra_Plan
+      runs-on: ubuntu-latest
+      environment: manual-approval
+      steps:
+        - name: Download Terraform Plan Output
+          uses: actions/download-artifact@v4
+          with:
+            name: terraform-plan
+            path: $PATH_TF
 
-      - name: Show Terraform Plan Output
-        run: cat $PATH_TF/plan_output.txt
+        - name: Show Terraform Plan Output
+          run: cat $PATH_TF/plan_output.txt
 
-      - name: Manual approval
-        uses: hmarr/auto-approve-action@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        - name: Manual approval
+          uses: hmarr/auto-approve-action@v3
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configure AWS credentials
-        run: |
-          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-          aws configure set region ${{ github.event.inputs.region }}
+        - name: Configure AWS credentials
+          run: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+            aws configure set region ${{ github.event.inputs.region }}
 
-      - name: Terraform apply
-        run: |
-          cd $PATH_TF
-          terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
+        - name: Terraform apply
+          run: |
+            cd $PATH_TF
+            terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
 
