@@ -25,7 +25,7 @@ env:
   PATH_TF: "/home/runner/work/NetflixInfra/NetflixInfra/tf"
 
 jobs:
-  Infra_Plan::
+  infra-plan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the app code
@@ -73,8 +73,8 @@ jobs:
           name: terraform-plan
           path: $PATH_TF/plan_output.txt
         
-  Infra_Apply:
-      needs: Infra_Plan
+  infra-apply:
+      needs: infra-plan
       runs-on: ubuntu-latest
       environment: manual-approval
       steps:
