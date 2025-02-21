@@ -61,36 +61,18 @@ jobs:
           fi
       
       - name: Terraform plan
-        id: plan
         run: |
           cd $PATH_TF
-          terraform plan -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars | tee plan_output.txt
+          terraform plan -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars
 
-      
-      - name: Upload Terraform Plan Output
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan
-          path: $PATH_TF/plan_output.txt
         
   infra-apply:
       needs: infra-plan
       runs-on: ubuntu-latest
-      environment: manual-approval
+      environment: production
       steps:
-        - name: Download Terraform Plan Output
-          uses: actions/download-artifact@v4
-          with:
-            name: terraform-plan
-            path: $PATH_TF
-
-        - name: Show Terraform Plan Output
-          run: cat $PATH_TF/plan_output.txt
-
-        - name: Manual approval
-          uses: hmarr/auto-approve-action@v3
-          with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
+        - name: Checkout the app code
+          uses: actions/checkout@v2
 
         - name: Configure AWS credentials
           run: |
