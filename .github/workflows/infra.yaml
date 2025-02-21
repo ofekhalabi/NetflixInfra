@@ -74,7 +74,7 @@ jobs:
   manual-approval:
     name: Manual Approval
     runs-on: ubuntu-latest
-    needs: terraform-plan
+    needs: infra-plan
     if: success() # Only proceed if terraform-plan job succeeds
     
     permissions:
@@ -85,7 +85,7 @@ jobs:
         uses: trstringer/manual-approval@v1
         with:
           secret: ${{ github.TOKEN }}
-          approvers: user1,user2,user3,group1,group2 # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
+          approvers: ofekhalabi # Replace with GitHub usernames, with the free version you can only have an issue assigned to one username
           minimum-approvals: 1
           issue-title: "Manual Approval Required for Terraform Apply"
           issue-body: "Please approve or deny the deployment."
