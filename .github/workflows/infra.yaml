@@ -67,21 +67,38 @@ jobs:
 
         
   infra-apply:
-      needs: infra-plan
-      runs-on: ubuntu-latest
-      environment: production
-      steps:
-        - name: Checkout the app code
-          uses: actions/checkout@v2
+    needs: infra-plan
+    runs-on: ubuntu-latest
+    environment: manual-approval
+    steps:
+      - name: Checkout the app code
+        uses: actions/checkout@v2
+      
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        
+      - name: Modify Public Key in Terraform File
+        run: |
+          sed -i 's|public_key = file(".*")|public_key = "${{ secrets.AWS_PUBLIC_KEY_TF }}"|' tf/main.tf
 
-        - name: Configure AWS credentials
-          run: |
-            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-            aws configure set region ${{ github.event.inputs.region }}
+      - name: configure AWS credentials
+        run: |
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set region ${{ github.event.inputs.region }}
+      
+      - name: Initialize Terraform
+        run: |
+          cd $PATH_TF
+          terraform init
+        
+      - name: Manual approval
+        uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Terraform apply
-          run: |
-            cd $PATH_TF
-            terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
+      - name: Terraform apply
+        run: |
+          cd $PATH_TF
+          terraform apply -var-file=$PATH_TF/region.${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}.tfvars -auto-approve
 
