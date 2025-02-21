@@ -20,7 +20,7 @@ on:
         description: 'insert the workspace to deploy the infra'
         required: true
         type: string
-        default: ${{ github.event.inputs.region }}.${{ github.event.inputs.environment }}
+        default: 'eu-north-1.dev'
 
         
 env:
