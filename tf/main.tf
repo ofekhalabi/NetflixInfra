@@ -80,7 +80,7 @@ resource "aws_key_pair" "tf_key_ec2" {
 
 # Create a new EBS volume
 resource "aws_ebs_volume" "tf_ebs_volume" {
-  availability_zone = "eu-north-1a"
+  availability_zone = var.region
   size              = 5
   type              = "gp3"
   tags = {
@@ -97,7 +97,7 @@ resource "aws_volume_attachment" "tf_ebs_volume_attachment" {
 
 #create a s3 bucket
 resource "aws_s3_bucket" "tf_s3_bucket" {
-  bucket = "ofekh-tf-netflix"
+  bucket = "ofekh-tf-netflix-${var.region}-${var.env}"
   acl    = "private" #only the owner can access the bucket
   tags = {
     Name = "ofekh-tf-netflix"
