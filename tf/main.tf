@@ -20,7 +20,7 @@ provider "aws" {
 resource "aws_instance" "netflix_app" {
   ami             = var.ami_id
   instance_type   = "t3.medium"
-  security_groups = [aws_security_group.netflix_app_sg.name]
+  vpc_security_group_ids = [aws_security_group.netflix_app_sg.id]
   key_name        = aws_key_pair.tf_key_ec2.key_name
   subnet_id       = module.netflix_app_vpc.public_subnets[0]
 
