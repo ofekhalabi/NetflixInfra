@@ -78,23 +78,6 @@ resource "aws_key_pair" "tf_key_ec2" {
 }
 
 
-# Create a new EBS volume
-resource "aws_ebs_volume" "tf_ebs_volume" {
-  availability_zone = var.region
-  size              = 5
-  type              = "gp3"
-  tags = {
-    Name = "ofekh-tf-netflix"
-  }
-}
-
-# Attach the EBS volume to the instance
-resource "aws_volume_attachment" "tf_ebs_volume_attachment" {
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.tf_ebs_volume.id
-  instance_id = aws_instance.netflix_app.id
-}
-
 #create a s3 bucket
 resource "aws_s3_bucket" "tf_s3_bucket" {
   bucket = "ofekh-tf-netflix-${var.region}-${var.env}"
@@ -125,6 +108,8 @@ module "netflix_app_vpc" {
   azs             = var.vpc_azs
   private_subnets = ["10.0.0.0/24", "10.0.1.0/24"]
   public_subnets  = ["10.0.2.0/24", "10.0.3.0/24"]
+
+  map_public_ip_on_launch = true
 
   enable_nat_gateway = false
 
