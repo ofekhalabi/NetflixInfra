@@ -22,6 +22,7 @@ resource "aws_instance" "netflix_app" {
   instance_type   = "t3.medium"
   security_groups = [aws_security_group.netflix_app_sg.name]
   key_name        = aws_key_pair.tf_key_ec2.key_name
+  subnet_id       = module.netflix_app_vpc.public_subnets[0]
 
   tags = {
     Name      = "ofekh-tf-netflix-${var.env}"
@@ -38,6 +39,7 @@ resource "aws_instance" "netflix_app" {
 resource "aws_security_group" "netflix_app_sg" {
   name        = "ofekh-netflix-app-sg"
   description = "Allow SSH and HTTP traffic"
+  vpc_id      = module.netflix_app_vpc.vpc_id
 
   ingress {
     from_port   = 22
