@@ -25,6 +25,13 @@ pipeline {
                 sh '''
                     cd k8s/$SERVICE_NAME
                     yq e -i ".spec.template.spec.containers[0].image = \"$IMAGE_FULL_NAME_PARAM\"" deployment.yaml
+                    yamlFile=deployment.yaml
+                    if [ -f "${yamlFile}" ]; then
+                        sed -i "s|image: .*|image: ${IMAGE_FULL_NAME_PARAM}|" ${yamlFile}
+                    else
+                        echo "ERROR: ${yamlFile} not found!"
+                        exit 1
+                    fi
                     git add deployment.yaml
                     git commit -m "Version upadte $SERVICE_NAME TO  this image : $IMAGE_FULL_NAME_PARAM"
                 '''
