@@ -27,7 +27,7 @@ pipeline {
                     #yq e -i ".spec.template.spec.containers[0].image = \"$IMAGE_FULL_NAME_PARAM\"" deployment.yaml
                     yamlFile=deployment.yaml
                     if [ -f "${yamlFile}" ]; then
-                        sed -i 's|image: .*|image: ${IMAGE_FULL_NAME_PARAM}|' ${yamlFile}
+                        sed -i "s|image: .*|image: ${IMAGE_FULL_NAME_PARAM}|" "${yamlFile}
                     else
                         echo "ERROR: ${yamlFile} not found!"
                         exit 1
