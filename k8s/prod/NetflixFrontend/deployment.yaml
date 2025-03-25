@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflix-frontend
+  labels:
+    app: netflix-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: netflix-frontend
+  template:
+    metadata:
+      labels:
+        app: netflix-frontend
+    spec:
+      containers:
+        - name: server
+          image: ofekhalabi/netflix-frontend:18
+          env:
+            - name: AWS_REGION
+              value: eu-north-1
+            - name: AWS_SNS_TOPIC_ARN
+              value: arn:aws:sns:eu-north-1:352708296901:ofekh-netflix-events-topic
+            - name: MOVIE_CATALOG_SERVICE
+              value: "http://netflixmoviecatalog-service:8080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflix-frontend-service
+spec:
+  selector:
+    app: netflix-frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  template:
+    spec:
+      containers:
+        - image: ofekhalabi/netflix-frontend:18
