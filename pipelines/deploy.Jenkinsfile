@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh '''
                     cd k8s/prod/$SERVICE_NAME
-                    yq e -i ".spec.template.spec.containers[0].image = \"$IMAGE_FULL_NAME_PARAM\"" deployment.yaml
+                    #yq e -i ".spec.template.spec.containers[0].image = \"$IMAGE_FULL_NAME_PARAM\"" deployment.yaml
                     yamlFile=deployment.yaml
                     if [ -f "${yamlFile}" ]; then
                         sed -i "s|image: .*|image: ${IMAGE_FULL_NAME_PARAM}|" ${yamlFile}
