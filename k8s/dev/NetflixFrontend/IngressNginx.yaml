@@ -6,7 +6,7 @@ metadata:
 spec:
   tls:
     - hosts:
-      - ofekhnetflix.devops-int-college.com
+      - ofekhnetflix.dev.devops-int-college.com # change this URL
       # This assumes tls-secret exists and the SSL
       # certificate contains a CN for ofekhnetflix.devops-int-college.com
       secretName: tls-secret
@@ -19,7 +19,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: netflix-frontend-service
+              name: netflix-frontend-service-dev
               port:
                 number: 3000
 
