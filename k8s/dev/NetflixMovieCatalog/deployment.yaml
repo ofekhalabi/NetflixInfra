@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netflixmoviecatalog
+  name: netflixmoviecatalog-dev
   labels:
-    app: netflixmoviecatalog
+    app: netflixmoviecatalog-dev
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: netflixmoviecatalog
+      app: netflixmoviecatalog-dev
   template:
     metadata:
       labels:
-        app: netflixmoviecatalog
+        app: netflixmoviecatalog-dev
     spec:
       containers:
         - name: server
@@ -24,7 +24,7 @@ metadata:
   name: netflixmoviecatalog-service-dev
 spec:
   selector:
-    app: netflixmoviecatalog
+    app: netflixmoviecatalog-dev
   ports:
     - protocol: TCP
       port: 8080
