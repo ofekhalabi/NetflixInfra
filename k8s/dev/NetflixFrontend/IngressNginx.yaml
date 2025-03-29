@@ -4,15 +4,9 @@ kind: Ingress
 metadata:
   name: nginx-ingress
 spec:
-  tls:
-    - hosts:
-      - ofekhnetflix.dev.devops-int-college.com # change this URL
-      # This assumes tls-secret exists and the SSL
-      # certificate contains a CN for ofekhnetflix.devops-int-college.com
-      secretName: tls-secret
   ingressClassName: nginx
   rules:
-    - host: ofekhnetflix.devops-int-college.com
+    - host: ofekh-netflix.dev.devops-int-college.com
       http:
         paths:
         - path: /
