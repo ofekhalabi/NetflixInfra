@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: ofekhalabi/netflix-movie-catalog:16
+          image: ofekhalabi/netflix-movie-catalog:23
           resources:
             requests:
               cpu: 100m
@@ -53,4 +53,4 @@ spec:
   template:
     spec:
       containers:
-        - image: ofekhalabi/netflix-movie-catalog:16
+        - image: ofekhalabi/netflix-movie-catalog:23
