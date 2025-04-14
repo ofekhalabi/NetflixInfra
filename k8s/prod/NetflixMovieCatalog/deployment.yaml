@@ -19,20 +19,24 @@ spec:
           image: ofekhalabi/netflix-movie-catalog:16
           resources:
             requests:
-              cpu: 200m
-              memory: 400Mi
+              cpu: 100m
+              memory: 300Mi
             limits:
-              cpu: 200m
-              memory: 400Mi
+              cpu: 100m
+              memory: 300Mi
             livenessProbe:
               initialDelaySeconds: 10
+              periodSeconds: 10
+              failureThreshold: 3
               httpGet:
-                path: "/"
+                path: "/live"
                 port: 8080
             readinessProbe:
-              initialDelaySeconds: 10
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
               httpGet:
-                path: "/"
+                path: "/ready"
                 port: 8080
 ---
 apiVersion: v1
