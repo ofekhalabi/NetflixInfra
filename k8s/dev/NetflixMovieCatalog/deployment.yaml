@@ -26,13 +26,17 @@ spec:
               memory: 400Mi
             livenessProbe:
               initialDelaySeconds: 10
+              periodSeconds: 10
+              failureThreshold: 3
               httpGet:
-                path: "/"
+                path: "/live"
                 port: 8080
             readinessProbe:
-              initialDelaySeconds: 10
+              initialDelaySeconds: 5
+              periodSeconds: 10
+              failureThreshold: 3
               httpGet:
-                path: "/"
+                path: "/ready"
                 port: 8080
 ---
 apiVersion: v1
