@@ -17,6 +17,23 @@ spec:
       containers:
         - name: server
           image: ofekhalabi/netflix-movie-catalog:16
+          resources:
+            requests:
+              cpu: 200m
+              memory: 400Mi
+            limits:
+              cpu: 200m
+              memory: 400Mi
+            livenessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/"
+                port: 8080
+            readinessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/"
+                port: 8080
 ---
 apiVersion: v1
 kind: Service
