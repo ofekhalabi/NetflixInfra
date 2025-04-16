@@ -19,11 +19,11 @@ spec:
           image: ofekhalabi/netflix-movie-catalog:23
           resources:
             requests:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 50m
+              memory: 150Mi
             limits:
-              cpu: 100m
-              memory: 300Mi
+              cpu: 50m
+              memory: 150Mi
             livenessProbe:
               initialDelaySeconds: 10
               periodSeconds: 10
