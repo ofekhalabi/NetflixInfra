@@ -2,36 +2,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netflix-frontend
+  name: {{ .Values.Deployment.name }}
+  namespace: {{ .Release.Namespace }}
   labels:
-    app: netflix-frontend
+    app: {{ .Values.Deployment.name }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.Deployment.replicas }}
   selector:
     matchLabels:
-      app: netflix-frontend
+      app: {{ .Values.Deployment.name }}
   template:
     metadata:
       labels:
-        app: netflix-frontend
+        app: {{ .Values.Deployment.name }}
     spec:
       containers:
-        - name: server
-          image: ofekhalabi/netflix-frontend:v1.0.19
+        - name: {{ .Values.Deployment.name }}
+          image: {{ .Values.Deployment.image.name }}:{{ .Values.Deployment.image.tag }}
           env:
             - name: AWS_REGION
-              value: eu-north-1
+              value: {{ .Values.Deployment.env.AWS_REGION }}
             - name: AWS_SNS_TOPIC_ARN
-              value: arn:aws:sns:eu-north-1:352708296901:ofekh-netflix-events-topic
+              value: {{ .Values.Deployment.env.AWS_SNS_TOPIC_ARN }}
             - name: MOVIE_CATALOG_SERVICE
-              value: "http://netflixmoviecatalog-service:8080"
+              value: {{ .Values.Deployment.env.MOVIE_CATALOG_SERVICE }}
           resources:
             requests:
-              cpu: 50m
-              memory: 150Mi
+              cpu: {{ .Values.Deployment.resources.requests.cpu }}
+              memory: {{ .Values.Deployment.resources.requests.memory }}
             limits:
-              cpu: 50m
-              memory: 150Mi
+              cpu: {{ .Values.Deployment.resources.limits.cpu }}
+              memory: {{ .Values.Deployment.resources.limits.memory }}
             livenessProbe:
               initialDelaySeconds: 10
               httpGet:
