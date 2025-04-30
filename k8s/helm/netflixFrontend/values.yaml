@@ -31,4 +31,3 @@ ingress:
   ingressClassName: nginx
   host: ofekh-netflix.prod.devops-int-college.com
   path: /
-
