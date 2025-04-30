@@ -1,5 +1,7 @@
 Deployment:
-  name: netflix-frontend
+  name: netflixmoviecatalog
+
+  replicas: 2
   image:
     name: ofekhalabi/netflix-frontend
     tag: v1.0.19
@@ -16,18 +18,6 @@ Deployment:
       memory: 150Mi
 
 service:
-  name: netflix-frontend-service
-  port: 3000
-  targetPort: 3000
-
-HPA:
-  name: netflix-frontend-hpa
-  minReplicas: 1
-  maxReplicas: 4
-  cpuUtilization: 50
-
-ingress:
-  name: nginx-ingress
-  ingressClassName: nginx
-  host: ofekh-netflix.prod.devops-int-college.com
-  path: /
+  name: netflixmoviecatalog-service
+  port: 8080
+  targetPort: 8080
