@@ -1,9 +1,5 @@
 Deployment:
   name: netflix-frontend
-<<<<<<< HEAD
-  replicas: 2
-=======
->>>>>>> k8s/helm-chart
   image:
     name: ofekhalabi/netflix-frontend
     tag: v1.0.19

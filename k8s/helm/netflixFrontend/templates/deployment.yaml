@@ -7,10 +7,6 @@ metadata:
   labels:
     app: {{ .Values.Deployment.name }}
 spec:
-<<<<<<< HEAD
-  replicas: {{ .Values.Deployment.replicas }}
-=======
->>>>>>> k8s/helm-chart
   selector:
     matchLabels:
       app: {{ .Values.Deployment.name }}
