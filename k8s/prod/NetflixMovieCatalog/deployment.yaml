@@ -37,6 +37,7 @@ spec:
               failureThreshold: 3
               httpGet:
                 path: "/ready"
+<<<<<<< HEAD
                 port: 8080
 ---
 apiVersion: v1
@@ -50,3 +51,6 @@ spec:
     - protocol: TCP
       port: 8080
       targetPort: 8080
+=======
+                port: 8080
+>>>>>>> k8s/helm-chart
