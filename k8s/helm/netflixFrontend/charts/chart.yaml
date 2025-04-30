@@ -1,0 +1,7 @@
+apiVersion: v2
+name: netflix-frontend
+description: a Helm chart for Netflix Frontend
+type: application
+# This is a Helm chart for deploying the Netflix Frontend application on Kubernetes.
+version: 0.1.0
+appVersion: 1.0.0
