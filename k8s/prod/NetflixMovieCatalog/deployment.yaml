@@ -37,4 +37,3 @@ spec:
               failureThreshold: 3
               httpGet:
                 path: "/ready"
-                port: 8080
