@@ -25,3 +25,9 @@ HPA:
   minReplicas: 1
   maxReplicas: 4
   cpuUtilization: 50
+
+ingress:
+  name: nginx-ingress
+  ingressClassName: nginx
+  host: ofekh-netflix.prod.devops-int-college.com
+  path: /
