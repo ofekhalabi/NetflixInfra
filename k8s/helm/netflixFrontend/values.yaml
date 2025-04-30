@@ -1,0 +1,28 @@
+Deployment:
+  name: netflix-frontend
+  replicas: 2
+  image:
+    name: ofekhalabi/netflix-frontend
+    tag: v1.0.19
+  env:
+    AWS_REGION: eu-north-1
+    AWS_SNS_TOPIC_ARN: arn:aws:sns:eu-north-1:352708296901:ofekh-netflix-events-topic
+    MOVIE_CATALOG_SERVICE: "http://netflixmoviecatalog-service:8080"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 150Mi
+    limits:
+      cpu: 50m
+      memory: 150Mi
+
+service:
+  name: netflix-frontend-service
+  port: 3000
+  targetPort: 3000
+
+HPA:
+  name: netflix-frontend-hpa
+  minReplicas: 1
+  maxReplicas: 10
+  cpuUtilization: 50

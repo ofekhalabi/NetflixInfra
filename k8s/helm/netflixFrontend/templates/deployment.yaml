@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.Deployment.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.Deployment.name }}
+spec:
+  replicas: {{ .Values.Deployment.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.Deployment.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.Deployment.name }}
+    spec:
+      containers:
+        - name: {{ .Values.Deployment.name }}
+          image: {{ .Values.Deployment.image.name }}:{{ .Values.Deployment.image.tag }}
+          env:
+            - name: AWS_REGION
+              value: {{ .Values.Deployment.env.AWS_REGION }}
+            - name: AWS_SNS_TOPIC_ARN
+              value: {{ .Values.Deployment.env.AWS_SNS_TOPIC_ARN }}
+            - name: MOVIE_CATALOG_SERVICE
+              value: {{ .Values.Deployment.env.MOVIE_CATALOG_SERVICE }}
+          resources:
+            requests:
+              cpu: {{ .Values.Deployment.resources.requests.cpu }}
+              memory: {{ .Values.Deployment.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.Deployment.resources.limits.cpu }}
+              memory: {{ .Values.Deployment.resources.limits.memory }}
+            livenessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/"
+                port: 80
+            readinessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/"
+                port: 80
