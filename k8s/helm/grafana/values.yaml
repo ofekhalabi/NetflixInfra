@@ -1,0 +1,25 @@
+statefulset:
+  replicas: 2
+  name: grafana
+  image:
+    repository: grafana/grafana
+    tag: latest
+  resources:
+    requests:
+      cpu: 50m
+      memory: 150Mi
+    limits:
+      cpu: 50m
+      memory: 150Mi
+  
+  persistence:
+    size: 10Gi
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+
+
+service:
+    name: grafana-service
+    port: 3000
+    targetPort: 3000
