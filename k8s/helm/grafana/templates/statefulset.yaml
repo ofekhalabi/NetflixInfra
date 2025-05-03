@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: statefulset
+metadata:
+  name: {{ .Values.statefulset.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Values.statefulset.name }}
+  selector:
+    matchLabels:
+      app: {{ .Values.statefulset.name }}
+spec:
+  serviceName: {{ .Values.service.name }}
+  replicas: {{ .Values.statefulset.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.statefulset.name }}
+    spec:
+      containers:
+        - name: {{ .Values.statefulset.name }}
+          image: {{ .Values.statefulset.image.repository }}:{{ .Values.statefulset.image.tag }}
+          resources:
+            requests:
+              cpu: {{ .Values.statefulset.resources.requests.cpu }}
+              memory: {{ .Values.statefulset.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.statefulset.resources.limits.cpu }}
+              memory: {{ .Values.statefulset.resources.limits.memory }}
+            livenessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/api/health" # Grafana health check endpoint
+                port: 3000
+            readinessProbe:
+              initialDelaySeconds: 10
+              httpGet:
+                path: "/api/health" # Grafana readiness check endpoint
+                port: 3000
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+      volumeClaimsTemplate:
+        - name: grafana-storage
+          accessModes:
+            - {{ .Values.statefulset.persistence.accessModes }}
+          resources:
+            requests:
+              storage: {{ .Values.statefulset.persistence.size }}
+          storageClassName: {{ .Values.statefulset.persistence.storageClassName | quote }}
